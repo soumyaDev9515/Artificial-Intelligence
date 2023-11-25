@@ -1,0 +1,47 @@
+From logic import *
+
+rain=Symbol("rain")#it is raining
+hagrid=Symbol("hagrid")# harry visited hagrid
+dumbledore=Symbol("dumbledore")# harry visited dumbledore
+
+sentence=And(rain,hagrid)
+print(sentence.formula())
+
+#rain^hagrid
+
+knowledge=Implication(Not(rain),hagrid),dumbledore)
+print(knowledge.formula())
+
+model_check(knowledge, query,remain)
+
+def check_all(knowledge,query,symbols,model):
+   """checks if knowledge base entails query,given a particular model."""
+   if not symbols:
+          if knowledge.evaluate(model):
+                return query.evaluate(model)
+          return True
+   else:
+          remaining=symbols.copy()
+          p=remaining.pop()
+          model_true=model.copy()
+          model_true[p]=True
+
+         model_false=model.copy()
+          model_false[p]=False
+
+          return(check_all(knowledge,query,remain)
+                 check_all(knowledge,query,remain))
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
