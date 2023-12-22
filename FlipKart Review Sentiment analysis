@@ -1,0 +1,52 @@
+import pandas as pd 
+import re 
+import seaborn as sns 
+from sklearn.feature_extraction.text import TfidfVectorizer 
+import matplotlib.pyplot as plt 
+from wordcloud import WordCloud
+
+import nltk 
+nltk.download('stopwords') 
+from nltk.corpus import stopwords
+
+data = pd.read_csv('flipkart_data.csv') 
+data.head()
+#Preprocessing and cleaning the reviews
+
+# unique ratings 
+pd.unique(data['rating'])
+
+sns.countplot(data=data, 
+              x='rating', 
+              order=data.rating.value_counts().index)
+
+# rating label(final) 
+pos_neg = [] 
+for i in range(len(data['rating'])): 
+    if data['rating'][i] >= 5: 
+        pos_neg.append(1) 
+    else: 
+        pos_neg.append(0) 
+  
+data['label'] = pos_neg 
+
+from tqdm import tqdm 
+  
+  
+def preprocess_text(text_data): 
+    preprocessed_text = [] 
+  
+    for sentence in tqdm(text_data): 
+        # Removing punctuations 
+        sentence = re.sub(r'[^\w\s]', '', sentence) 
+  
+        # Converting lowercase and removing stopwords 
+        preprocessed_text.append(' '.join(token.lower() 
+                                          for token in nltk.word_tokenize(sentence) 
+                                          if token.lower() not in stopwords.words('english'))) 
+  
+    return preprocessed_text 
+
+
+preprocessed_review = preprocess_text(data['review'].values) 
+data['review'] = preprocessed_review
